@@ -36,6 +36,12 @@ open class EventView: UIView {
     view.isScrollEnabled = false
     return view
   }()
+    
+    lazy var backgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
 
   lazy var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
   lazy var longPressGestureRecognizer: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
@@ -56,6 +62,7 @@ open class EventView: UIView {
 
     color = tintColor
     addSubview(textView)
+    addSubview(backgroundView)
   }
 
   func updateWithDescriptor(event: EventDescriptor) {
@@ -67,8 +74,11 @@ open class EventView: UIView {
       textView.font = event.font
     }
     descriptor = event
-    backgroundColor = event.backgroundColor
+    backgroundColor = UIColor.clear
     color = event.color
+    backgroundView.backgroundColor = event.backgroundColor
+    backgroundView.layer.cornerRadius = 5.0
+    backgroundView.layer.masksToBounds = true
     setNeedsDisplay()
     setNeedsLayout()
   }
@@ -87,8 +97,8 @@ open class EventView: UIView {
     context!.interpolationQuality = .none
     context?.saveGState()
     context?.setStrokeColor(color.cgColor)
-    context?.setLineWidth(3)
-    context?.translateBy(x: 0, y: 0.5)
+    context?.setLineWidth(4)
+    context?.translateBy(x: 0, y: 0.0)
     let x: CGFloat = 0
     let y: CGFloat = 0
     context?.beginPath()
@@ -101,5 +111,6 @@ open class EventView: UIView {
   override open func layoutSubviews() {
     super.layoutSubviews()
     textView.fillSuperview()
+    backgroundView.fillSuperview()
   }
 }

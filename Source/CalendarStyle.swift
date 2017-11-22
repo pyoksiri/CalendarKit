@@ -98,7 +98,7 @@ public class SwipeLabelStyle: NSCopying {
 
 public class TimelineStyle: NSCopying {
   public var timeIndicator = CurrentTimeIndicatorStyle()
-  public var timeColor = UIColor.lightGray
+  public var timeColor = UIColor(red: 29.0/255.0, green: 29.0/255.0, blue: 38.0/255.0, alpha: 1.0)
   public var lineColor = UIColor.lightGray
   public var backgroundColor = UIColor.white
   public var font = UIFont.boldSystemFont(ofSize: 11)

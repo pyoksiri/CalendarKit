@@ -13,6 +13,7 @@ open class DayViewController: UIViewController, EventDataSource, DayViewDelegate
 
     dayView.dataSource = self
     dayView.delegate = self
+    dayView.isHeaderViewVisible = false
     dayView.reloadData()
   }
 

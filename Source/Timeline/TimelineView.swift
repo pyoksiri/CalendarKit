@@ -42,21 +42,22 @@ public class TimelineView: UIView, ReusableView {
 
   var style = TimelineStyle()
 
-  var verticalDiff: CGFloat = 45
+  var verticalDiff: CGFloat = 100
   var verticalInset: CGFloat = 10
-  var leftInset: CGFloat = 53
-
+  var leftInset: CGFloat = 70
+  var timeSize: CGFloat = 60
+    
   var horizontalEventInset: CGFloat = 3
 
   var fullHeight: CGFloat {
-    return verticalInset * 2 + verticalDiff * 24
+    return verticalInset * 2 + verticalDiff * 24 + 40
   }
 
   var calendarWidth: CGFloat {
     return bounds.width - leftInset
   }
     
-  var is24hClock = true {
+  var is24hClock = false {
     didSet {
       setNeedsDisplay()
     }
@@ -148,13 +149,9 @@ public class TimelineView: UIView, ReusableView {
 
     let mutableParagraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
     mutableParagraphStyle.lineBreakMode = .byWordWrapping
-    mutableParagraphStyle.alignment = .right
+    mutableParagraphStyle.alignment = .center
     let paragraphStyle = mutableParagraphStyle.copy() as! NSParagraphStyle
     
-    let attributes = [NSAttributedStringKey.paragraphStyle: paragraphStyle,
-                      NSAttributedStringKey.foregroundColor: self.style.timeColor,
-                      NSAttributedStringKey.font: style.font] as [NSAttributedStringKey : Any]
-
     for (i, time) in times.enumerated() {
       let iFloat = CGFloat(i)
       let context = UIGraphicsGetCurrentContext()
@@ -163,8 +160,8 @@ public class TimelineView: UIView, ReusableView {
       context?.setStrokeColor(self.style.lineColor.cgColor)
       context?.setLineWidth(onePixel)
       context?.translateBy(x: 0, y: 0.5)
-      let x: CGFloat = 53
-      let y = verticalInset + iFloat * verticalDiff
+      let x: CGFloat = 70
+      let y = verticalInset + iFloat * verticalDiff + 10
       context?.beginPath()
       context?.move(to: CGPoint(x: x, y: y))
       context?.addLine(to: CGPoint(x: (bounds).width, y: y))
@@ -172,14 +169,22 @@ public class TimelineView: UIView, ReusableView {
       context?.restoreGState()
 
       if i == hourToRemoveIndex { continue }
+    
+        let mutableAttributes = NSMutableAttributedString()
+        if let hour = time.components(separatedBy: " ").first {
+            let hourAttributed = NSAttributedString.init(string: String(format: "%@\n", hour), attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 24.0, weight: .light), NSAttributedStringKey.paragraphStyle: paragraphStyle, NSAttributedStringKey.foregroundColor: self.style.timeColor])
+            mutableAttributes.append(hourAttributed)
+            
+            if let ampm = time.components(separatedBy: " ").last, ampm != hour {
+                let aAttributed = NSAttributedString.init(string: ampm, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 9.0, weight: .regular), NSAttributedStringKey.paragraphStyle: paragraphStyle, NSAttributedStringKey.foregroundColor: self.style.timeColor])
+                mutableAttributes.append(aAttributed)
+            }
+        }
         
-      let fontSize = style.font.pointSize
       let timeRect = CGRect(x: 2, y: iFloat * verticalDiff + verticalInset - 7,
-                            width: leftInset - 8, height: fontSize + 2)
-
-      let timeString = NSString(string: time)
-
-      timeString.draw(in: timeRect, withAttributes: attributes)
+                            width: leftInset - 8, height: timeSize + 2)
+        
+        mutableAttributes.draw(in: timeRect)
     }
   }
 
