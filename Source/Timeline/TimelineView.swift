@@ -45,6 +45,7 @@ public class TimelineView: UIView, ReusableView {
   var verticalDiff: CGFloat = 100
   var verticalInset: CGFloat = 10
   var leftInset: CGFloat = 70
+  var addedInset: CGFloat = 10
   var timeSize: CGFloat = 60
     
   var horizontalEventInset: CGFloat = 3
@@ -161,7 +162,7 @@ public class TimelineView: UIView, ReusableView {
       context?.setLineWidth(onePixel)
       context?.translateBy(x: 0, y: 0.5)
       let x: CGFloat = 70
-      let y = verticalInset + iFloat * verticalDiff + 10
+      let y = verticalInset + iFloat * verticalDiff + addedInset
       context?.beginPath()
       context?.move(to: CGPoint(x: x, y: y))
       context?.addLine(to: CGPoint(x: (bounds).width, y: y))
@@ -205,7 +206,7 @@ public class TimelineView: UIView, ReusableView {
       let rect = CGRect(origin: CGPoint.zero, size: size)
       nowLine.date = currentTime
       nowLine.frame = rect
-      nowLine.center.y = dateToY(currentTime)
+      nowLine.center.y = dateToY(currentTime) + addedInset
     }
   }
 
@@ -259,7 +260,7 @@ public class TimelineView: UIView, ReusableView {
         let floatIndex = CGFloat(index)
         let x = leftInset + floatIndex / totalCount * calendarWidth
         let equalWidth = calendarWidth / totalCount
-        event.frame = CGRect(x: x, y: startY, width: equalWidth, height: endY - startY)
+        event.frame = CGRect(x: x, y: startY + addedInset, width: equalWidth, height: endY - startY)
       }
     }
   }
