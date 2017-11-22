@@ -21,6 +21,7 @@ public class TimelinePagerView: UIView {
   }
 
   open var autoScrollToFirstEvent = false
+    open var autoScrollDisable = true
 
   let timelinePager = PagingScrollView<TimelineContainer>()
   var timelineSynchronizer: ScrollSynchronizer?
@@ -47,7 +48,8 @@ public class TimelinePagerView: UIView {
   }
 
   func configure() {
-    configureTimelinePager()
+    configureTimelineOnce()
+//    configureTimelinePager()
   }
 
   public func updateStyle(_ newStyle: TimelineStyle) {
@@ -69,6 +71,30 @@ public class TimelinePagerView: UIView {
     timelinePager.reusableViews.first?.scrollTo(hour24: hour24)
   }
 
+    func configureTimelineOnce() {
+        var verticalScrollViews = [TimelineContainer]()
+        
+        let timeline = TimelineView(frame: bounds)
+        timeline.delegate = self
+        timeline.eventViewDelegate = self
+        timeline.frame.size.height = timeline.fullHeight
+        timeline.date = Date().add(TimeChunk.dateComponents(days: 0))
+        
+        let verticalScrollView = TimelineContainer()
+        verticalScrollView.timeline = timeline
+        verticalScrollView.addSubview(timeline)
+        verticalScrollView.contentSize = timeline.frame.size
+        
+        timelinePager.addSubview(verticalScrollView)
+        timelinePager.reusableViews.append(verticalScrollView)
+        verticalScrollViews.append(verticalScrollView)
+        
+        timelineSynchronizer = ScrollSynchronizer(views: verticalScrollViews)
+        addSubview(timelinePager)
+        
+        timelinePager.viewDelegate = self
+    }
+    
   func configureTimelinePager() {
     var verticalScrollViews = [TimelineContainer]()
     for i in -1...1 {
@@ -164,7 +190,7 @@ extension TimelinePagerView: PagingScrollViewDelegate {
   }
 
   func scrollToFirstEventIfNeeded() {
-    if autoScrollToFirstEvent {
+    if autoScrollToFirstEvent, !autoScrollDisable {
       let index = Int(timelinePager.currentScrollViewPage)
       timelinePager.reusableViews[index].scrollToFirstEvent()
     }

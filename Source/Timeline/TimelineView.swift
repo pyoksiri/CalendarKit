@@ -214,7 +214,11 @@ public class TimelineView: UIView, ReusableView {
 
     for (idx, descriptor) in eventDescriptors.enumerated() {
       let eventView = eventViews[idx]
-      eventView.frame = descriptor.frame
+        var frame = descriptor.frame
+        if frame.size.width > 148.0 {
+            frame.size.width = 148.0
+        }
+      eventView.frame = frame
       eventView.updateWithDescriptor(event: descriptor)
     }
   }
