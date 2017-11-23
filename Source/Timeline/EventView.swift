@@ -77,8 +77,13 @@ open class EventView: UIView {
     backgroundColor = UIColor.clear
     color = event.color
     backgroundView.backgroundColor = event.backgroundColor
-    backgroundView.layer.cornerRadius = 5.0
     backgroundView.layer.masksToBounds = true
+    let path = UIBezierPath(roundedRect:backgroundView.bounds,
+                            byRoundingCorners:[.topRight, .bottomRight],
+                            cornerRadii: CGSize(width: 5.0, height:  5.0))
+    let maskLayer = CAShapeLayer()
+    maskLayer.path = path.cgPath
+    backgroundView.layer.mask = maskLayer
     setNeedsDisplay()
     setNeedsLayout()
   }

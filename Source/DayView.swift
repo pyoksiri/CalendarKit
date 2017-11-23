@@ -23,6 +23,13 @@ public class DayView: UIView {
 
   public weak var delegate: DayViewDelegate?
 
+    public var timelineContentInsets: UIEdgeInsets? {
+        didSet {
+            timelinePagerView.timelineSynchronizer?.views.forEach{$0.contentInset = timelineContentInsets!}
+            timelinePagerView.timelineSynchronizer?.views.forEach{$0.scrollIndicatorInsets = timelineContentInsets!}
+        }
+    }
+    
   /// Hides or shows header view
   public var isHeaderViewVisible = true {
     didSet {
