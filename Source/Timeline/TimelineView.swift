@@ -172,13 +172,22 @@ public class TimelineView: UIView, ReusableView {
       if i == hourToRemoveIndex { continue }
     
         let mutableAttributes = NSMutableAttributedString()
-        if let hour = time.components(separatedBy: " ").first {
-            let hourAttributed = NSAttributedString.init(string: String(format: "%@\n", hour), attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 24.0, weight: .light), NSAttributedStringKey.paragraphStyle: paragraphStyle, NSAttributedStringKey.foregroundColor: self.style.timeColor])
-            mutableAttributes.append(hourAttributed)
-            
-            if let ampm = time.components(separatedBy: " ").last, ampm != hour {
-                let aAttributed = NSAttributedString.init(string: ampm, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 9.0, weight: .regular), NSAttributedStringKey.paragraphStyle: paragraphStyle, NSAttributedStringKey.foregroundColor: self.style.timeColor])
-                mutableAttributes.append(aAttributed)
+        
+        if is24hClock {
+            if let hour = time.components(separatedBy: ":").first {
+                let hourAttributed = NSAttributedString.init(string: String(format: "%@\n", hour), attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 24.0, weight: .light), NSAttributedStringKey.paragraphStyle: paragraphStyle, NSAttributedStringKey.foregroundColor: self.style.timeColor])
+                mutableAttributes.append(hourAttributed)
+            }
+        }
+        else {
+            if let hour = time.components(separatedBy: " ").first {
+                let hourAttributed = NSAttributedString.init(string: String(format: "%@\n", hour), attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 24.0, weight: .light), NSAttributedStringKey.paragraphStyle: paragraphStyle, NSAttributedStringKey.foregroundColor: self.style.timeColor])
+                mutableAttributes.append(hourAttributed)
+                
+                if let ampm = time.components(separatedBy: " ").last, ampm != hour {
+                    let aAttributed = NSAttributedString.init(string: ampm, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 9.0, weight: .regular), NSAttributedStringKey.paragraphStyle: paragraphStyle, NSAttributedStringKey.foregroundColor: self.style.timeColor])
+                    mutableAttributes.append(aAttributed)
+                }
             }
         }
         
