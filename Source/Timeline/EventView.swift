@@ -78,12 +78,6 @@ open class EventView: UIView {
     color = event.color
     backgroundView.backgroundColor = event.backgroundColor
     backgroundView.layer.masksToBounds = true
-    let path = UIBezierPath(roundedRect:backgroundView.bounds,
-                            byRoundingCorners:[.topRight, .bottomRight],
-                            cornerRadii: CGSize(width: 2.5, height:  2.5))
-    let maskLayer = CAShapeLayer()
-    maskLayer.path = path.cgPath
-    backgroundView.layer.mask = maskLayer
     setNeedsDisplay()
     setNeedsLayout()
   }
@@ -117,5 +111,11 @@ open class EventView: UIView {
     super.layoutSubviews()
     textView.fillSuperview()
     backgroundView.fillSuperview()
+    let path = UIBezierPath(roundedRect:backgroundView.bounds,
+                            byRoundingCorners:[.topRight, .bottomRight],
+                            cornerRadii: CGSize(width: 2.5, height:  2.5))
+    let maskLayer = CAShapeLayer()
+    maskLayer.path = path.cgPath
+    backgroundView.layer.mask = maskLayer
   }
 }
