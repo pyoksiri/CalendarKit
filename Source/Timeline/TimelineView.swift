@@ -42,7 +42,7 @@ public class TimelineView: UIView, ReusableView {
 
   var style = TimelineStyle()
 
-  var verticalDiff: CGFloat = 100
+  var verticalDiff: CGFloat = 128
   var verticalInset: CGFloat = 10
   var leftInset: CGFloat = 70
   var addedInset: CGFloat = 10
