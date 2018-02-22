@@ -34,6 +34,8 @@ open class EventView: UIView {
     view.isUserInteractionEnabled = false
     view.backgroundColor = .clear
     view.isScrollEnabled = false
+    view.textContainer.maximumNumberOfLines = 3
+    view.textContainer.lineBreakMode = .byTruncatingTail
     return view
   }()
     
